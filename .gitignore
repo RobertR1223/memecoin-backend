@@ -1,0 +1,12 @@
+# Compiled binary addons (http://nodejs.org/api/addons.html)
+build/Release
+
+# Dependency directory
+# https://docs.npmjs.com/cli/shrinkwrap#caveats
+node_modules
+
+.env**
+
+**/dist*
+
+snowflake.log

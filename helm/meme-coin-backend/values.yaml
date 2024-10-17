@@ -1,0 +1,46 @@
+replicaCount: 2
+
+image:
+  repository: us-central1-docker.pkg.dev/tmgalaxy/astra-testnet/meme-coin-backend
+  pullPolicy: IfNotPresent
+  tag: meme-coin-backend-c5879af
+
+serviceAccount:
+  create: true
+  automount: false
+  name: "meme-coin-backend-sa"
+
+service:
+  type: LoadBalancer
+  port: 5000
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: api.getluckydog.ai
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: 
+   - secretName: meme-coin-backend-tls
+     hosts:
+       - api.getluckydog.ai
+
+resources: 
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
